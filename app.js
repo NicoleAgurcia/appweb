@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 
 var routes = require('./routes/index');
-
+var autos = require('./routes/autos');
 
 
 var app= express();
@@ -24,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use('/', routes);
+app.use('/autos', autos);
 
 var autosShema = mongoose.Schema({
 	_id: Number,
@@ -34,6 +35,9 @@ var autosShema = mongoose.Schema({
 
 var Autos = mongoose.model('auto', autosShema);
 
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname,'public','index.html')); 
+});
 
 app.get('/automoviles',(req,res)=>{
 	Autos.find((err,auto)=>{
@@ -59,7 +63,7 @@ app.get('/automoviles/:id',(req,res)=>{
 
 
 app.get('/automoviles/year/:anio',(req,res)=>{
-	Autos.find({anio: {$gte: req.params.anio}},function (err, auto) {
+	Autos.find({anio: {$gte: req.params.anio}},(err, auto)=>{
     		if (err) {
     			console.log(err);
     			res.send('Hubo un error en la base de datos');
@@ -71,7 +75,7 @@ app.get('/automoviles/year/:anio',(req,res)=>{
 })
 
 app.get('/automoviles/year/:anioi/:aniof',(req,res)=>{
-    Autos.find({anio:{$gte:req.params.anioi,$lte:req.params.aniof}},function(err,auto){
+    Autos.find({anio:{$gte:req.params.anioi,$lte:req.params.aniof}},(err,auto)=>{
         if (err) 
             res.status(500).send("Hubo un error en la base de datos");
         else
@@ -144,6 +148,12 @@ app.delete('/automoviles/:id',(req,res)=>{
         });
 });
 
+
+
+
+app.use((req, res, next)=>{
+  res.status(404).send('Esa pagina no existe!');
+});
 
 
 
