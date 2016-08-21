@@ -36,8 +36,13 @@ var autosShema = mongoose.Schema({
 var Autos = mongoose.model('auto', autosShema);
 
 app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname,'public','autos.html')); 
+});
+
+app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname,'public','index.html')); 
 });
+
 
 app.get('/automoviles',(req,res)=>{
 	Autos.find((err,auto)=>{

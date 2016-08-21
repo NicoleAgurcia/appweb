@@ -29,7 +29,7 @@ router.get("/",(req,res)=>{
 })
 
 router.get("/toyota",(req,res)=>{
-    res.download(path.join(__dirname,'public','images','toyota1.jpg'),'toyota.jpg',
+    res.download(path.join(__dirname,'../public/images/toyota1.jpg'),'toyota.jpg',
     (err)=>{
         if (err)
             console.log("Error al descargar");
@@ -39,7 +39,7 @@ router.get("/toyota",(req,res)=>{
 })
 
 router.get("/nissan",(req,res)=>{
-    res.download(path.join(__dirname,'public','images','nissan.png'),'nissan.png',
+    res.download(path.join(__dirname,'../public/images/nissan.jpg'),'nissan.png',
     (err)=>{
         if (err)
             console.log("Error al descargar");
@@ -48,7 +48,7 @@ router.get("/nissan",(req,res)=>{
     });
 })
 router.get("/honda",(req,res)=>{
-    res.download(path.join(__dirname,'public','images','honda.png'),'honda.png',
+    res.download(path.join(__dirname,'../public/images/honda.jpg'),'honda.png',
     (err)=>{
         if (err)
             console.log("Error al descargar");
@@ -57,7 +57,7 @@ router.get("/honda",(req,res)=>{
     });
 })
 router.get("/hyundai",(req,res)=>{
-    res.download(path.join(__dirname,'public','images','hyundai.png'),'hyundai.png',
+    res.download(path.join(__dirname,'../public/images/hyundai.jpg'),'hyundai.png',
     (err)=>{
         if (err)
             console.log("Error al descargar");
