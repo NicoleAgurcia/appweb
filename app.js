@@ -2,6 +2,10 @@ var express = require("express");
 var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 
+var routes = require('./routes/index');
+
+
+
 var app= express();
 
 app.listen(3000,()=>{
@@ -15,8 +19,11 @@ db.once('open', function() {
 	    console.log('Se ha establecido la conexion a la base de datos');
 	});
 
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use('/', routes);
 
 var autosShema = mongoose.Schema({
 	_id: Number,
@@ -28,7 +35,7 @@ var autosShema = mongoose.Schema({
 var Autos = mongoose.model('auto', autosShema);
 
 
-app.get('/autos',(req,res)=>{
+app.get('/automoviles',(req,res)=>{
 	Autos.find((err,auto)=>{
 		if(err)
 			res.status(500).send('Hubo un error en la base de datos');
@@ -37,7 +44,7 @@ app.get('/autos',(req,res)=>{
 	});
 })
 
-app.get('/autos/:id',(req,res)=>{
+app.get('/automoviles/:id',(req,res)=>{
 	Autos.findById(req.params.id,(err,auto)=>{
 		if(err)
 			res.status(500).send('Hubo un error en la base de datos');
@@ -51,7 +58,31 @@ app.get('/autos/:id',(req,res)=>{
 })
 
 
-app.post('/autos',(req,res)=>{
+app.get('/automoviles/year/:anio',(req,res)=>{
+	Autos.find({anio: {$gte: req.params.anio}},function (err, auto) {
+    		if (err) {
+    			console.log(err);
+    			res.send('Hubo un error en la base de datos');
+    		}
+    		else
+    			res.json(auto);
+    	});
+	
+})
+
+app.get('/automoviles/year/:anioi/:aniof',(req,res)=>{
+    Autos.find({anio:{$gte:req.params.anioi,$lte:req.params.aniof}},function(err,auto){
+        if (err) 
+            res.status(500).send("Hubo un error en la base de datos");
+        else
+            res.json(auto);
+    });
+})
+
+
+//////////////////////////CRUD//////////////////////
+
+app.post('/automoviles',(req,res)=>{
 	var nuevAuto= new Autos({
 	_id: req.body.id,
 	descripcion: {marca: req.body.marca, modelo: req.body.modelo},
@@ -69,7 +100,7 @@ app.post('/autos',(req,res)=>{
 
 });
 
-app.put('/autos/:id',(req,res)=>{
+app.put('/automoviles/:id',(req,res)=>{
 	Autos.findById(req.params.id,(err,auto)=>{
 		if(err)
 			res.status(500).send('Hubo un error en la base de datos');
@@ -94,7 +125,7 @@ app.put('/autos/:id',(req,res)=>{
 });
 
 
-app.delete('/autos/:id',(req,res)=>{
+app.delete('/automoviles/:id',(req,res)=>{
 	Autos.findById(req.params.id,(err, auto)=>{
 		if (err)
 			res.status(500).send('Error en la base de datos');
